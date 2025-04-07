@@ -1,5 +1,5 @@
 #!/bin/bash
-# Enhanced installation script for litellm and open-webui
+# Enhanced installation script for litellm and open-webui using "docker compose"
 
 # Exit immediately if a command fails
 set -e
@@ -11,9 +11,15 @@ function check_command() {
   command -v "$1" >/dev/null 2>&1 || { echo >&2 "$1 is not installed. Exiting."; exit 1; }
 }
 
+# Check for required commands
 check_command git
 check_command docker
-check_command docker-compose
+
+# Check if "docker compose" is available
+if ! docker compose version >/dev/null 2>&1; then
+  echo "docker compose is not installed. Exiting."
+  exit 1
+fi
 
 echo "All required commands are installed."
 
@@ -68,8 +74,8 @@ EOF
 echo "Please copy the above .env file content to your notes if needed."
 read -p "Press Enter to continue and start the litellm application..."
 
-# Start the litellm application using docker-compose
-docker-compose up -d
+# Start the litellm application using docker compose
+docker compose up -d
 
 # Return to the parent directory
 cd ..
